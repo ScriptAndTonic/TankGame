@@ -7,4 +7,13 @@ router.get('/', async(req, res, next) => {
     res.send(tanks);
 });
 
+router.post('/', async(req, res, next) => {
+    Tank.create({
+        name: req.body.name,
+        maxHealth: req.body.maxHealth,
+        damage: req.body.damage,
+        range: req.body.range
+    }).then((tank) => res.send(tank));
+})
+
 module.exports = router;

@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const schema = mongoose.Schema({
-    name: String
+    name: String,
+    maxHealth: Number,
+    damage: Number,
+    range: Number
 });
 
 module.exports = mongoose.model('Tank', schema);

@@ -1,5 +1,7 @@
 var express = require('express');
 const Session = require('../models/Session');
+const Map = require('../models/Map');
+const liveSession = require('../live/live_session.js');
 var router = express.Router();
 
 router.get('/', async(req, res, next) => {
@@ -10,26 +12,21 @@ router.get('/', async(req, res, next) => {
 router.get('/:id/render', async(req, res, next) => {
     const sessionId = req.params.id;
     let session = await Session.findById(sessionId);
-    let render = '<h3>';
-
-    for (let i = 0; i < 50; i++) {
-        for (let j = 0; j < 50; j++) {
-            if (i == session.tank1StartingPosition.row && j == session.tank1StartingPosition.column) {
-                render += '1';
-            } else {
-                if (i == session.tank2StartingPosition.row && j == session.tank2StartingPosition.column) {
-                    render += '2';
-                } else {
-                    render += '-';
-                }
-            }
-        }
-        render += '<br>';
-    }
-    render += '</h3>';
-
+    const map = await Map.findOne({ name: session.map });
+    const render = liveSession.renderSession(map, session.tank1Position, session.tank2Position);
     res.send(render);
 });
 
+router.post('/', async(req, res, next) => {
+    let session = await Session.create({
+        map: req.body.map,
+        tank1: req.body.tank1,
+        tank2: req.body.tank2,
+        status: 'new',
+        winner: ''
+    });
+
+    res.send(await liveSession.startSession(session, req.body.tank1StartingPosition, req.body.tank2StartingPosition));
+});
 
 module.exports = router;

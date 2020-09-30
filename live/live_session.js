@@ -1,6 +1,6 @@
 const Map = require('../models/Map');
 const Tank = require('../models/Tank');
-const tankAI = require('../AI/tank_AI.js');
+const tankAI = require('../ai/tank_AI');
 
 const startSession = async(sessionInfo, tank1StartingPosition, tank2StartingPosition) => {
     let tank1Info = await Tank.findOne({ name: sessionInfo.tank1 });

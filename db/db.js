@@ -3,11 +3,14 @@ const dotenv = require('dotenv').config;
 
 let _db;
 
-function init() {
+const init = () => {
     mongoose.connect('mongodb://localhost:27017/tankGameTest', { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => console.log('Connected to Mongo'));
 }
 
-module.exports = {
-    init
+const disconnect = async() => {
+    await mongoose.disconnect();
 }
+
+module.exports.init = init;
+module.exports.disconnect = disconnect;

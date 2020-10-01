@@ -5,7 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var dbInit = require('./db/db').init;
+var db = require('./db/db');
 
 var indexRouter = require('./routes/index');
 var tanksRouter = require('./routes/tanks');
@@ -45,6 +45,6 @@ app.use(function(err, req, res, next) {
     res.render('error');
 });
 
-dbInit();
+db.init();
 
 module.exports = app;

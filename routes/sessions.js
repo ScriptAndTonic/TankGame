@@ -9,6 +9,10 @@ router.get('/', async(req, res, next) => {
     res.send(sessions);
 });
 
+router.get('/:id', async(req, res, next) => {
+    res.send(await Session.findById(req.params.id));
+});
+
 router.get('/:id/render', async(req, res, next) => {
     const sessionId = req.params.id;
     let session = await Session.findById(sessionId);
@@ -26,7 +30,8 @@ router.post('/', async(req, res, next) => {
         winner: ''
     });
 
-    res.send(await liveSession.startSession(session, req.body.tank1StartingPosition, req.body.tank2StartingPosition));
+    liveSession.startSession(session, req.body.tank1StartingPosition, req.body.tank2StartingPosition);
+    res.send('Session started, check status by the following session ID: ' + session.id);
 });
 
 module.exports = router;

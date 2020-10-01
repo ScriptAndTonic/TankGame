@@ -1,38 +1,23 @@
 const Map = require('../models/Map');
 const Tank = require('../models/Tank');
-const tankAI = require('../ai/tank_AI');
+const { Worker } = require('worker_threads');
 
 const startSession = async(sessionInfo, tank1StartingPosition, tank2StartingPosition) => {
-    let tank1Info = await Tank.findOne({ name: sessionInfo.tank1 });
-    let tank2Info = await Tank.findOne({ name: sessionInfo.tank2 });
-
     let liveSession = {
+        tank1: sessionInfo.tank1,
+        tank2: sessionInfo.tank2,
+        sessionID: sessionInfo.id,
         tank1Position: tank1StartingPosition,
         tank2Position: tank2StartingPosition,
-        tank1Health: tank1Info.maxHealth,
-        tank2Health: tank2Info.maxHealth,
         map: await Map.findOne({ name: sessionInfo.map }),
         round: 0,
         status: 'running'
     };
 
-    while (liveSession.status === 'running') {
-        console.log('-------- Round: ' + liveSession.round + ' --------');
-        if (liveSession.round % 2 == 0) {
-            liveSession = tankAI.takeTurn(tank1Info, liveSession, 1);
-        } else {
-            liveSession = tankAI.takeTurn(tank2Info, liveSession, 2);
-        }
-        if (liveSession.tank1Health <= 0 || liveSession.tank2Health <= 0) {
-            liveSession.status = 'finished';
-        }
-        liveSession.round++;
-    }
-    sessionInfo.status = 'finished';
-    sessionInfo.winner = liveSession.tank1Health <= 0 ? 'Tank2' : 'Tank1';
-
-    console.log('SESSION FINISHED after ' + liveSession.round + ' rounds. Winner: ' + sessionInfo.winner);
-    return await sessionInfo.save();
+    const worker = new Worker('./live/session_worker.js');
+    worker.on('message', message => console.log("Worker: " + message));
+    worker.on('error', err => console.log('Worker threw an error: ' + err.message));
+    worker.postMessage(JSON.stringify(liveSession));
 }
 
 const renderSession = (map, tank1Position, tank2Position) => {

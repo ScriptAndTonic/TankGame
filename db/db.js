@@ -4,7 +4,7 @@ const dotenv = require('dotenv').config;
 let _db;
 
 const init = () => {
-    mongoose.connect('mongodb://localhost:27017/tankGameTest', { useNewUrlParser: true, useUnifiedTopology: true })
+    mongoose.connect('mongodb://mongo:27017/tankGameTest', { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => console.log('Connected to Mongo'));
 }
 

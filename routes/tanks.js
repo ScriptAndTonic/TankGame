@@ -12,7 +12,8 @@ router.post('/', async(req, res, next) => {
         name: req.body.name,
         maxHealth: req.body.maxHealth,
         damage: req.body.damage,
-        range: req.body.range
+        range: req.body.range,
+        speed: req.body.speed
     }).then((tank) => res.send(tank));
 })
 

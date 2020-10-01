@@ -14,12 +14,12 @@ const takeTurn = (tankInfo, liveSession, tankNumber) => {
     } else {
         if (tankNumber == 1) {
             console.log('TANK1 MOVE');
-            let tank1NewPosition = moveTowardsPoint(liveSession.tank1Position, liveSession.tank2Position);
+            let tank1NewPosition = moveTowardsPoint(liveSession.tank1Position, liveSession.tank2Position, tankInfo.speed);
             updatedSession.tank1Position = tank1NewPosition;
             console.log('New position: ' + tank1NewPosition.row + ', ' + tank1NewPosition.column);
         } else {
             console.log('TANK2 MOVE');
-            let tank2NewPosition = moveTowardsPoint(liveSession.tank2Position, liveSession.tank1Position);
+            let tank2NewPosition = moveTowardsPoint(liveSession.tank2Position, liveSession.tank1Position, tankInfo.speed);
             updatedSession.tank2Position = tank2NewPosition;
             console.log('New position: ' + tank2NewPosition.row + ', ' + tank2NewPosition.column);
         }
@@ -31,18 +31,18 @@ function calculateDistance(a, b) {
     return Math.sqrt(Math.pow(a.row - b.row, 2) + Math.pow(a.column - b.column, 2));
 }
 
-function moveTowardsPoint(position, point) {
+function moveTowardsPoint(position, point, speed) {
     if (Math.sqrt(Math.pow(position.row - point.row, 2)) >= Math.sqrt(Math.pow(position.column - point.column, 2))) {
         if (position.row > point.row) {
-            return { row: position.row - 1, column: position.column };
+            return { row: position.row - speed, column: position.column };
         } else {
-            return { row: position.row + 1, column: position.column };
+            return { row: position.row + speed, column: position.column };
         }
     } else {
         if (position.column > point.column) {
-            return { row: position.row, column: position.column - 1 };
+            return { row: position.row, column: position.column - speed };
         } else {
-            return { row: position.row, column: position.column + 1 };
+            return { row: position.row, column: position.column + speed };
         }
     }
 }

@@ -6,12 +6,10 @@ const startSession = async(sessionInfo, tank1StartingPosition, tank2StartingPosi
     let liveSession = {
         tank1: sessionInfo.tank1,
         tank2: sessionInfo.tank2,
-        sessionID: sessionInfo.id,
         tank1Position: tank1StartingPosition,
         tank2Position: tank2StartingPosition,
         map: await Map.findOne({ name: sessionInfo.map }),
-        round: 0,
-        status: 'running'
+        sessionID: sessionInfo.id
     };
 
     const worker = new Worker('./live/session_worker.js');

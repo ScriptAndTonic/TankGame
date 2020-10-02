@@ -1,5 +1,4 @@
 const Map = require('../models/Map');
-const Tank = require('../models/Tank');
 const { Worker } = require('worker_threads');
 
 const startSession = async(sessionInfo, tank1StartingPosition, tank2StartingPosition) => {
@@ -18,36 +17,4 @@ const startSession = async(sessionInfo, tank1StartingPosition, tank2StartingPosi
     worker.postMessage(JSON.stringify(liveSession));
 }
 
-const renderSession = (map, tank1Position, tank2Position) => {
-    let mapMatrix = [];
-
-    for (let i = 0; i < 50; i++) {
-        mapMatrix.push([]);
-        for (let j = 0; j < 50; j++) {
-            mapMatrix[i].push('___');
-        }
-    }
-
-    mapMatrix[tank1Position.row][tank1Position.column] = '_1_';
-    mapMatrix[tank2Position.row][tank2Position.column] = '_2_';
-
-    map.obstacles.forEach(obstacle => {
-        mapMatrix[obstacle.row][obstacle.column] = '_X_';
-    });
-
-    let render = '<h3 style="font-size: 10px;" font-family="Courier New", Courier, monospace">';
-
-    for (let i = 0; i < 50; i++) {
-        for (let j = 0; j < 50; j++) {
-            render += mapMatrix[i][j];
-        }
-        render += '<br>';
-    }
-
-    render += '</h3>';
-
-    return render;
-}
-
 module.exports.startSession = startSession;
-module.exports.renderSession = renderSession;

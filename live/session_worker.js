@@ -3,7 +3,6 @@ const tankAI = require('../ai/tank_AI');
 const Tank = require('../models/Tank');
 const Session = require('../models/Session');
 var db = require('../db/db');
-const { disconnect } = require('mongoose');
 
 parentPort.once('message', async(liveSessionJSON) => {
     db.init();

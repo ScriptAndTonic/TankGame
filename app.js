@@ -4,6 +4,21 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const expressJSDocSwagger = require('express-jsdoc-swagger');
+const swaggerOptions = {
+    info: {
+        version: '1.0.0',
+        title: 'Tank Game',
+        description: 'A simple tank game'
+    },
+    filesPattern: './**/*.js',
+    swaggerUIPath: '/swagger',
+    baseDir: __dirname,
+    servers: [{
+        url: 'http://localhost:' + (process.env.PORT || 3000),
+        description: 'The current instance of the game',
+    }]
+};
 
 var db = require('./db/db');
 
@@ -13,6 +28,8 @@ var mapsRouter = require('./routes/maps');
 var sessionsRouter = require('./routes/sessions');
 
 var app = express();
+
+expressJSDocSwagger(app)(swaggerOptions);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -35,7 +52,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};

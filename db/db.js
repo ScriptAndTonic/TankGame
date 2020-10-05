@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 
 const init = () => {
-    mongoose.connect('mongodb://' + process.env.MONGO_HOST + '/tankGame', { useNewUrlParser: true, useUnifiedTopology: true })
+    const mongoURL = process.env.MONGO_HOST || 'mongo:27017';
+    console.log('Attempting to connect to mongo: ' + mongoURL);
+    mongoose.connect('mongodb://' + mongoURL + '/tankGame', { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => console.log('Connected to Mongo'));
 }
 

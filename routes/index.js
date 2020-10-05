@@ -3,10 +3,12 @@ var router = express.Router();
 const Map = require('../models/Map');
 const Tank = require('../models/Tank');
 
-router.get('/', function(_req, res) {
-    res.render('index', { title: 'Express' });
-});
-
+/**
+ * POST /demo
+ * @summary Populates the database with 2 demo tanks and 1 demo map
+ * @tags demo
+ * @return {string} 200 - success response - string
+ */
 router.post('/demo', (_req, res) => {
     new Map({
         name: "Demo_Map",
